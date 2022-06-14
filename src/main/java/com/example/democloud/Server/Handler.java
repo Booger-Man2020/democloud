@@ -4,24 +4,21 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Handler implements Runnable {
-    public static String serverDir = "server_files";
+    private String serverDir = "server_files";
     private DataInputStream is;
     private DataOutputStream os;
-    public Path serverDirectory;
+
 
     public Handler(Socket socket) throws IOException {
         is = new DataInputStream(socket.getInputStream());
         os = new DataOutputStream(socket.getOutputStream());
         System.out.println("Client accepted");
-        List<String> files = getFiles(serverDir);
-        for (String file : files) {
-            os.writeUTF(file);
-        }
-        os.flush();
+        sendListOfFiles(serverDir);
     }
 
 
@@ -38,9 +35,6 @@ public class Handler implements Runnable {
     private List<String> getFiles(String dir) {
         String[] list = new File(dir).list();
         assert list != null;
-        if (list == null) {
-            list = new File(dir).list();
-        }
         return Arrays.asList(list);
     }
 
@@ -54,7 +48,7 @@ public class Handler implements Runnable {
                 if (command.equals("#file#")) {
                     String fileName = is.readUTF();
                     long len = is.readLong();
-//                    serverDirectory = Files.createDirectory(Path.of("serverDir", "serverDir1"));
+//                   Path serverDirectory = Files.createDirectory(Path.of("serverDir"));
                     File file = Path.of(serverDir).resolve(fileName).toFile();
                     try (FileOutputStream fos = new FileOutputStream(file)) {
                         for (int i = 0; i < (len + 255) / 256; i++) {
