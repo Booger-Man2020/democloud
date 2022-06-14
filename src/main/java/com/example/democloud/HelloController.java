@@ -30,6 +30,7 @@ public class HelloController implements Initializable {
     private void readLoop() {
         try {
             while (true) {
+
                 String command = network.readString();
                 if (command.equals("#list")) {
                     Platform.runLater(() -> serverView.getItems().clear());
@@ -49,6 +50,7 @@ public class HelloController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
+            buf = new byte[256];
             homeDir = System.getProperty("user.home");
             clientView.getItems().clear();
             clientView.getItems().addAll(getFiles(homeDir));
@@ -74,23 +76,23 @@ public class HelloController implements Initializable {
 
         network.getOs().writeUTF("#file#");
         String file = clientView.getSelectionModel().getSelectedItem();
-        network.getOs().writeUTF(file);
         File toSend = Path.of(homeDir).resolve(file).toFile();
+        network.getOs().writeUTF(file);
         network.getOs().writeLong(toSend.length());
         try (FileInputStream fis = new FileInputStream(toSend)) {
             while (fis.available() > 0) {
-                int read = fis.read(buf);
-                network.getOs().write(buf, 0, read);
+                int readed = fis.read(buf);
+                network.getOs().write(buf, 0, readed);
 //            }
             }
-            //  network.getOs().;
+            // network.getOs().flush();
         }
     }
 
 
 
     public void download(ActionEvent actionEvent) throws Exception {
-        String dir = System.getProperty("serverDir");
+        String dir = System.getProperty("server_files");
         serverView.getItems().addAll(dir);
         String file = serverView.getSelectionModel().getSelectedItem();
         network.getIs().readUTF();
