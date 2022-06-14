@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="369.0" prefWidth="426.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democloud.HelloController">
+    <children>
+        <HBox layoutX="5.0" layoutY="3.0" prefHeight="326.0" prefWidth="444.0">
+            <children>
+                <ListView fx:id="clientView" editable="true" prefHeight="326.0" prefWidth="214.0"/>
+                <ListView fx:id="serverView" editable="true" prefHeight="200.0" prefWidth="200.0"/>
+            </children>
+        </HBox>
+        <Button layoutX="89.0" layoutY="332.0" mnemonicParsing="false" onAction="#upload" text="to Server" />
+        <Button layoutX="303.0" layoutY="332.0" mnemonicParsing="false" onAction="#download" text="to Client" />
+    </children>
+</AnchorPane>
